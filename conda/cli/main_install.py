@@ -36,6 +36,12 @@ def configure_parser(sub_parsers):
         help="Revert to the specified REVISION.",
         metavar='REVISION',
     )
+    p.add_argument(
+        "--pre_install_hook",
+        action="store",
+        default="",
+        help="Call python function with before install."
+    )
     common.add_parser_install(p)
     common.add_parser_json(p)
     p.set_defaults(func=execute)

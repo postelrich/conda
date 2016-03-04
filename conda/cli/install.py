@@ -405,6 +405,15 @@ environment does not exist: %s
                 message='All requested packages already installed.')
         return
 
+    if args.pre_install_hook:
+        pre_install_split = args.pre_install_hook.split('.')
+        if len(pre_install_split) < 2:
+            raise ValueError("Must provide pre_install_hook in the format of mymodule.my_function")
+        pre_install_module, pre_install_func = ".".join(pre_install_split[:-1]), pre_install_split[-1]
+        import importlib
+        pre_install_module = importlib.import_module(pre_install_module)
+        getattr(pre_install_module, pre_install_func)(actions)
+
     if not args.json:
         print()
         print("Package plan for installation in environment %s:" % prefix)
